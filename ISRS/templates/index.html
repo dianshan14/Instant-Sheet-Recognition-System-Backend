@@ -1,0 +1,32 @@
+{% macro render_comment(comment) %}
+    <li>{{ comment }}</li>
+{% endmacro %}
+
+{% if g.user %}
+    <li><span>{{ g.user.username }}</span>
+    <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+{% else %}
+    <li><a href="{{ url_for('auth.register') }}">Register</a>
+    <li><a href="{{ url_for('auth.login') }}">Log In</a>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div id="flash">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<ul>
+    {% for comment in comments %}
+        {{ render_comment(comment) }}
+	{% endfor %}
+</ul>
+
+<img alt="something" src="{{ url_for('static', filename='fb-cover.jpg') }}">
+
+<script>
+    sessionStorage.sheet_id = 10
+</script>
