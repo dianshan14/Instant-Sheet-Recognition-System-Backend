@@ -17,12 +17,14 @@ def generate_sheet():
     if request.method == 'POST':
         new_sheet = request.get_json()
 
+        # if arg exist -> update
+        # else gen
         user = User.query.filter_by(id=g.user.id).first()
-        sheet = Sheet(title=new_sheet['title'],
-                      question_number=int(new_sheet['question_number']),
+        sheet = Sheet(title=new_sheet['sheet_title'],
+                      question_number=int(new_sheet['total_ques_num']),
                       users=user)
-        for question in new_sheet['questions']:
-            Question(question_title=question['title'],
+        for question in new_sheet['ques_set']:
+            Question(question_title=question['problem'],
                      option_title=question['options'],
                      sheets=sheet)
         db.session.add(sheet)
@@ -81,6 +83,11 @@ def visualize_sheet(sheet_id):
 def visualize_sheet_json(sheet_id):
     """ JSON response about sheet of specific user """
     sheet = Sheet.query.filter_by(id=sheet_id).first()
+    
+    # No this sheet id
+    if sheet is None:
+        abort(404)
+
     if g.user.id == sheet.user_id:
         question_titles = list()
         option_titles = list()
@@ -101,9 +108,23 @@ def visualize_sheet_json(sheet_id):
                 response_conclude[i][str(choose)] += 1
 
         return jsonify(title=sheet.title,
-                       question_number=sheet.question_number,
+                       question_number=sheet.question_number, # 數量
                        question_title=question_titles,
                        option_titles=option_titles,
                        response_conclude=response_conclude
                       )
+    
+    # sheet does not belong to this user
     abort(401)
+
+@bp.route('/admin')
+def list_user():
+    users = User.query.all()
+    data = dict()
+    data['username'] = list()
+    data['password'] = list()
+    for user in users:
+        data['username'].append(user.username)
+        data['password'].append(user.password)
+        print(user.username)
+    return jsonify(data)

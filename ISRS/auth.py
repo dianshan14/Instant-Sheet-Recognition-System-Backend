@@ -39,6 +39,7 @@ def login():
         # TODO: 'username' -> form and variable name
         username = request.form['username']
         password = request.form['password']
+        print(request.form)
         error_msg = None
 
         user = User.query.filter_by(username=username).first()
@@ -64,7 +65,7 @@ def load_logging_in_user_data():
         g.user = None
     else:
         g.user = User.query.filter_by(id=user_id).first()
-    
+
 
 @bp.route('/logout/')
 def logout():
@@ -82,4 +83,4 @@ def force_login(endpoint):
             return view(**kwargs)
         return wrapped_view
     return deco
-    
+
