@@ -4,6 +4,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from ISRS.model import db, User
+from ISRS.color import colors
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -27,9 +28,11 @@ def register():
             new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+            print(colors.GREEN + 'Register success' + colors.END)
             return redirect(url_for('auth.login'))
-
+        
         flash(error_msg)
+        print(colors.RED + 'Register fail' + colors.END)
 
     return render_template('register.html')
 
@@ -52,9 +55,11 @@ def login():
             endpoint = session.get('next', 'index')
             session.clear()
             session['user_id'] = user.id
+            print(colors.GREEN + 'Login success' + colors.END)
             return redirect(url_for(endpoint))
 
         flash(error_msg)
+        print(colors.RED + 'Login fail' + colors.END)
 
     return render_template('login.html')
 
