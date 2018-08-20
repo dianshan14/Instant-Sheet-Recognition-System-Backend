@@ -117,6 +117,10 @@ def visualize_sheet_json(sheet_id):
     # sheet does not belong to this user
     abort(401)
 
+@bp.route('/about')
+def about():
+    render_template('about.html')
+
 @bp.route('/admin')
 def list_user():
     users = User.query.all()

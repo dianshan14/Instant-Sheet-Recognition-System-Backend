@@ -34,7 +34,7 @@ def register():
         flash(error_msg)
         print(colors.RED + 'Register fail' + colors.END)
 
-    return render_template('register.html')
+    return render_template('signup.html')
 
 @bp.route('/login/', methods=('GET', 'POST'))
 def login():
