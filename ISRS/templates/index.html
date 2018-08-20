@@ -1,0 +1,107 @@
+{% macro render_comment(comment) %}
+    <li>{{ comment }}</li>
+{% endmacro %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+{% if g.user %}
+    <li><span>{{ g.user.username }}</span>
+    <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+{% else %}
+    <li><a href="{{ url_for('auth.register') }}">Register</a>
+    <li><a href="{{ url_for('auth.login') }}">Log In</a>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div id="flash">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+<ul>
+    {% for comment in comments %}
+        {{ render_comment(comment) }}
+	{% endfor %}
+</ul>
+
+<button type="button" onclick="send_request()">123</button>
+
+<script>
+    sessionStorage.sheet_id = 10
+
+    function send_request()
+    {
+var sheet = {
+    "sheet_title": "問卷",
+    "sheet_footer" : "謝謝",
+    "total_ques_num": 3,
+    "total_opt_num": 6,
+    "sheet_type": 2,
+    "ques_set": [
+        {
+            "prob_num" : 1,
+            "problem": "你好嗎",
+            "option": [
+                {
+                    "opt_num": 1,
+                    "description": "好"
+                },
+                {
+                    "opt_num": 2,
+                    "description": "不好"
+                }
+            ]
+        },
+        {
+            "prob_num" : 2,
+            "problem": "你嗎",
+            "option": [
+                {
+                    "opt_num": 1,
+                    "description": "Yes"
+                },
+                {
+                    "opt_num": 2,
+                    "description": "NO"
+                }
+            ]
+        },
+        {
+            "prob_num" : 3,
+            "problem": "超級無敵亂",
+            "option": [
+                {
+                    "opt_num": 1,
+                    "description": "超級無敵超級無敵亂"
+                },
+                {
+                    "opt_num": 2,
+                    "description": "看看誰比較亂比較多文字國文聞聞聞聞"
+                }
+            ]
+        }
+    ]
+}
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json',
+            url: "/test",
+            //url: "http://127.0.0.1:5000/test",
+            data: JSON.stringify(sheet),
+            success: showResult,
+            error: onError,
+            dataType: 'json'
+        });
+    }
+
+    function showResult(abc){
+        console.log(abc)
+    }
+    
+    function onError(abc){
+        console.log(abc)
+    }
+</script>
