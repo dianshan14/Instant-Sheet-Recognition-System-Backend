@@ -27,72 +27,30 @@
 	{% endfor %}
 </ul>
 
-<button type="button" onclick="send_request()">123</button>
+<img alt="something" src="{{ url_for('static', filename='fb-cover.jpg') }}">
 
 <script>
     sessionStorage.sheet_id = 10
+</script>
 
+<button type="button" onclick="send_request()">123</button>
+
+<script>
     function send_request()
     {
-var sheet = {
-    'sheet_title': "�~U~O�~M�",
-    'sheet_footer' : "��~]��~]",
-    'total_ques_num': 3,
-    'total_opt_num': 6,
-    'sheet_type': 2,
-    'ques_set': [
-        {
-            'prob_num' : 1,
-            'problem': '��| 好�~W~N',
-            'option': [
-                {
-                    opt_num: 1,
-                    description: '好'
-                },
-                {
-                    opt_num: 2,
-                    description: '��~M好'
-                }
-            ]
-        },
-        {
-            'prob_num' : 2,
-            'problem': '��| �~W~N',
-            'option': [
-                {
-                    opt_num: 1,
-                    description: 'Yes'
-                },
-                {
-                    opt_num: 2,
-                    description: 'NO'
-                }
-            ]
-        },
-        {
-            'prob_num' : 3,
-            'problem': '��~E��~Z�~D��~U���~B',
-            'option': [
-                {
-                    opt_num: 1,
-                    description: '��~E��~Z�~D��~U���~E��~Z�~D��~U���~B'
-                },
-                {
-                    opt_num: 2,
-                    description: '�~\~K�~\~K誰��~T��~C��~B��~T��~C��~Z�~V~G��~W�~\~K�~V~G�~A~^�~A~^�~A~^�~A~^'
-                }
-            ]
+        var sheet = {
+            name: "somestring",
+            address: "Tainan",
+            phone: "09999999"
         }
-    ]
-}
         $.ajax({
             type: "POST",
-            contentType: 'application/json',
-            url: "/test",
-            //url: "http://127.0.0.1:5000/test",
+            //url: "http://18.191.142.38/test",
+            url: "http://127.0.0.1:5000/test",
             data: JSON.stringify(sheet),
             success: showResult,
             error: onError,
+            contentType: 'application/json',
             dataType: 'json'
         });
     }
