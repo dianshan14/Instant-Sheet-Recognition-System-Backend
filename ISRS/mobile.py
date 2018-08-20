@@ -14,17 +14,19 @@ def upload_photo():
     """
     pass
 
-@bp.route('/check_login/<username>')
-def check_login(username):
+@bp.route('/check_login/')
+def check_login():
     """
         check user login.
         Response: 0 is not logged-in, otherwise return user_id
     """
+    username = request.form['username']
+    password = request.form['password']
     user = User.query.filter_by(username=username).first()
     if user:
-        return Response(str(user.id))
+        return Response("login_success")
     else:
-        return Response('0')
+        return Response("login_fail")
 
 @bp.route('/list/<user_id>')
 def mobile_list_sheet(user_id):

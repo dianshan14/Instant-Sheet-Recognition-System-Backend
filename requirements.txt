@@ -3,7 +3,10 @@ click==6.7
 dominate==2.3.1
 Flask==1.0.2
 Flask-Bootstrap==3.3.7.1
+<<<<<<< HEAD
+=======
 Flask-SQLAlchemy==2.3.2
+>>>>>>> 09f711161e400dba36dc11ee4f2e48964f91e3e0
 isort==4.3.4
 itsdangerous==0.24
 Jinja2==2.10
