@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "${workspaceFolder}/ISRS_VENV/bin/python",
+    "python.venvPath": "${workspaceFolder}/ISRS_VENV/"
+}
