@@ -1,2 +1,4 @@
-config.cfg
+.pylintrc
+ISRS/.vscode
 ISRS/__pycache__
+ISRS/config.cfg
