@@ -5,6 +5,7 @@ from flask import (
 
 from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet, Question, Response
+from ISRS.color import colors
 
 bp = Blueprint('action', __name__, url_prefix='/action')
 
@@ -35,7 +36,7 @@ def generate_sheet():
     # TODO: store JSON data into sheet table
     # return redirect(url_for('action.list_sheet'))
 
-    return '<h1 style="text-align: center;">Gen</h1>'
+    return render_template('template.html')
 
 @bp.route('/list/')
 @force_login('action.list_sheet')
@@ -119,7 +120,7 @@ def visualize_sheet_json(sheet_id):
 
 @bp.route('/about')
 def about():
-    render_template('about.html')
+    return render_template('about.html')
 
 @bp.route('/admin')
 def list_user():
