@@ -35,7 +35,7 @@ def register():
         flash(error_msg)
         print(colors.RED + 'Register fail' + colors.END)
 
-    return render_template('signup.html')
+    return render_template('signup.html', register='menu-active')
 
 @bp.route('/login/', methods=('GET', 'POST'))
 def login():
@@ -62,7 +62,7 @@ def login():
         flash(error_msg)
         print(colors.RED + 'Login fail' + colors.END)
 
-    return render_template('login.html')
+    return render_template('login.html', login='menu-active')
 
 @bp.before_app_request
 def load_logging_in_user_data():
@@ -76,7 +76,7 @@ def load_logging_in_user_data():
 @bp.route('/logout/')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('index', index='menu-active'))
 
 def force_login(endpoint):
     def deco(view):

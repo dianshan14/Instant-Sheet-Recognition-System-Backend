@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
+{% block head %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="{{ url_for('static', filename='src/images/favicon.ico') }}" />
@@ -12,46 +11,34 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='src/css/nav.css') }}"></link>
     <link rel="stylesheet" href="{{ url_for('static', filename='src/css/grid.css') }}"></link>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/css/userauth.css') }}">
-</head>
+{% endblock %}
 
-<body>
-    <div class="my-wrapper">
-        <header>
-            <div class="topnav" id="myTopnav">
-                <a href="{{ url_for('index') }}">ISRS</a>
-                <a href="{{ url_for('auth.login') }}">Login</a>
-                <a href="{{ url_for('auth.register') }}" class="menu-active">Sign up</a>
-                <a href="{{ url_for('action.about') }}">About us</a>
-                <a href="javascript:void(0);" class="icon" onclick="responsive_nav()">
-                    <i class="fa fa-bars"></i>
-                </a>
+{% block section %}
+    <section class="form-container">
+        <div class="userauth-form">
+            <div class="form-title">
+                <h1>Sign up</h1>
             </div>
-        </header>
-        <section class="form-container">
-            <div class="userauth-form">
-                <div class="form-title">
-                    <h1>Sign up</h1>
+            <form method="POST">
+                <div class="userauth-input">
+                    <label for="id_username">Username:</label>
+                    <input type="text" name="username" maxlength="100" required autofocus />
                 </div>
-                <form method="POST">
-                    <div class="userauth-input">
-                        <label for="id_username">Username:</label>
-                        <input type="text" name="username" maxlength="100" required autofocus />
-                    </div>
-                    <div class="userauth-input">
-                        <label for="id_password1">Password:</label>
-                        <input type="password" name="password" maxlength="100" required />
-                    </div>
-                    <div class="userauth-submit">
-                        <button type="submit" class="signup-btn">
-                            Signup
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </div>
-</body>
+                <div class="userauth-input">
+                    <label for="id_password1">Password:</label>
+                    <input type="password" name="password" maxlength="100" required />
+                </div>
+                <div class="userauth-submit">
+                    <button type="submit" class="signup-btn">
+                        Signup
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
 
-</html>
-<script type="text/javascript" src="{{ url_for('static', filename='src/js/nav.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='src/js/admin.js') }}"></script>
+{% block end_body_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='src/js/nav.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='src/js/admin.js') }}"></script>    
+{% endblock %}

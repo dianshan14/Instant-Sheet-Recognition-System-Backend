@@ -120,7 +120,7 @@ def visualize_sheet_json(sheet_id):
 
 @bp.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html', about='menu-active')
 
 @bp.route('/admin')
 def list_user():

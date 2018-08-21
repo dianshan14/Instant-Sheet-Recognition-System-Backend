@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+    <div class="my-wrapper">
+        <header>
+            <div class="topnav" id="myTopnav">
+                <a href="{{ url_for('index') }}" class="{{ index }}">ISRS</a>
+                {% if g.user %}
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                    <a href="{{ url_for('action.about') }}"class="{{ about }}">About us</a>
+                    <a href="#">Hello, {{ g.user['username'] }}</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}"class="{{ login }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}"class="{{ register }}">Sign up</a>
+                    <a href="{{ url_for('action.about') }}"class="{{ about }}">About us</a>
+                {% endif %}
+                <a href="javascript:void(0);" class="icon" onclick="responsive_nav()">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </header>
+        {% block section %}
+        {% endblock %}
+    </div>
+
+    {% block end_body_script %}
+    {% endblock %}
+</body>
+
+</html>

@@ -11,11 +11,7 @@ def create_app():
 
     @app.route('/')
     def index():
-        elements = [("comment" + str(i)) for i in range(30)]
-        return render_template('index.html', comments=elements)
-    @app.route('/js')
-    def js():
-        return render_template('index2.html')
+        return render_template('index.html', index='menu-active')
 
     @app.route('/test', methods=['OPTIONS'])
     def test_options():
