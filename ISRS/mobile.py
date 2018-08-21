@@ -1,20 +1,51 @@
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, Response
+    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, Response, current_app
 )
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
 from ISRS.auth import force_login
 from ISRS.model import db, User
 from ISRS.color import colors
 
+import os
+
 bp = Blueprint('mobile', __name__, url_prefix='/mobile')
 
-@bp.route('/recognition', methods=['POST'])
+@bp.route('/recognition/', methods=['POST'])
 def upload_photo():
     """
         upload photo from mobile phone and recognize this photo
     """
-    return Response('OK')
+    print(colors.GREEN + '----- Mobile Upload file -----' + colors.END)
+    print(request.files) # many file
+
+    if 'file' not in request.files:
+        print(colors.RED + 'No file' + colors.END)
+        return Response('Fail')
+
+    uploaded_file = request.files['file']
+
+    if uploaded_file.filename == '':
+        print(colors.RED + 'No selected file' + colors.END)
+        return Response('Fail')
+    
+    if uploaded_file and allowed_file(uploaded_file.filename):
+        filename = secure_filename(uploaded_file.filename)
+        uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        print(colors.BLUE + 'File saved to '
+              + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
+        return Response('OK')
+
+    return Response('Fail')
+
+def allowed_file(filename):
+    """
+        Check filename allowed.
+        rsplit(seprator, max) : return list with length = max+1
+    """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 @bp.route('/check_login/', methods=['POST'])
 def check_login():

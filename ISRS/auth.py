@@ -25,7 +25,7 @@ def register():
             error_msg = 'User {} is already registered'.format(username)
 
         if error_msg is None:
-            print(len(generate_password_hash(password)))
+            print(len(generate_password_hash(password, 'sha256')))
             new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
@@ -76,7 +76,7 @@ def load_logging_in_user_data():
 @bp.route('/logout/')
 def logout():
     session.clear()
-    return redirect(url_for('index', index='menu-active'))
+    return redirect(url_for('index'))
 
 def force_login(endpoint):
     def deco(view):
