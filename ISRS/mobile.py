@@ -14,7 +14,7 @@ def upload_photo():
     """
         upload photo from mobile phone and recognize this photo
     """
-    pass
+    return Response('OK')
 
 @bp.route('/check_login/', methods=['POST'])
 def check_login():
