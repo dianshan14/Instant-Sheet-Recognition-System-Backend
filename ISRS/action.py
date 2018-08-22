@@ -82,16 +82,7 @@ def visualize_sheet(sheet_id):
     
     return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
 
-@bp.route('/visualize_json/<sheet_id>/', methods=['OPTIONS'])
-def test_options():
-    print('OPTIONS check')
-    res = Response("OK")
-    res.headers['Access-Control-Allow-Origin'] = '*'
-    res.headers['Access-Control-Allow-Methods'] = 'GET,POST'
-    res.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return res
-
-@bp.route('/visualize_json/<sheet_id>/', provide_automatic_options=False)
+@bp.route('/visualize_json/<sheet_id>/')
 @force_login('action.visualize_sheet_json')
 def visualize_sheet_json(sheet_id):
     """ JSON response about sheet of specific user """
@@ -103,25 +94,9 @@ def visualize_sheet_json(sheet_id):
 
     if g.user.id == sheet.user_id:
         question_titles = list()
-        option_titles = list()
         response_conclude = list()
 
         # if everything is empty ?
-
-        """
-        for question in sheet.questions: # all questions belong to this sheet
-            question_titles.append(question.question_title) # collect all question title
-            option_titles.append(question.option_title) # collect all option title
-            response_sum = dict()
-            for num in range(1, len(question.option_title)+1):
-                response_sum[str(num)] = 0 # spell specific question and its option '1', '2', '3',...
-            response_conclude.append(response_sum) # order is question order
-
-        # collect responses
-        for response in sheet.responses:
-            for i, choose in enumerate(response.response_list):
-                response_conclude[i][str(choose)] += 1
-        """
 
         for question in sheet.questions:
             question_titles.append(question.question_title)

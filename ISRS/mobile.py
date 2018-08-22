@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 
 from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet, Response
+from ISRS.model import Response as db_Response
 from ISRS.color import colors
 
 import os
@@ -58,7 +59,7 @@ def add_response():
 def add_response_record(sheet_id, answer_list):
     if sheet_id > 0 and answer_list: 
         sheet = Sheet.query.filter_by(id=sheet_id).first()
-        new_response = Response(response_list=answer_list, sheets=sheet)
+        new_response = db_Response(response_list=answer_list, sheets=sheet)
         db.session.add(new_response)
         db.session.commit()
         return True
