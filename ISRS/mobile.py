@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
 from ISRS.auth import force_login
-from ISRS.model import db, User, Sheet, Response
+from ISRS.model import db, User, Sheet
 from ISRS.model import Response as db_Response
 from ISRS.color import colors
 
