@@ -38,6 +38,8 @@ def upload_photo():
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
         return Response('OK')
 
+    if not allowed_file(uploaded_file.filename):
+        print(colors.RED + 'extension' + colors.END)
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
     return Response('Fail')
 
