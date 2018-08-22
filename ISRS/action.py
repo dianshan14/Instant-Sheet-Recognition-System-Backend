@@ -82,7 +82,16 @@ def visualize_sheet(sheet_id):
     
     return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
 
-@bp.route('/visualize_json/<sheet_id>/', methods=('GET', 'POST'))
+@bp.route('/visualize_json/<sheet_id>/', methods=['OPTIONS'])
+def test_options():
+    print('OPTIONS check')
+    res = Response("OK")
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    res.headers['Access-Control-Allow-Methods'] = 'GET,POST'
+    res.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return res
+
+@bp.route('/visualize_json/<sheet_id>/', provide_automatic_options=False)
 @force_login('action.visualize_sheet_json')
 def visualize_sheet_json(sheet_id):
     """ JSON response about sheet of specific user """
