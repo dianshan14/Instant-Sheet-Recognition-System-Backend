@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
 from ISRS.auth import force_login
-from ISRS.model import db, User
+from ISRS.model import db, User, Sheet, Response
 from ISRS.color import colors
 
 import os
@@ -37,6 +37,7 @@ def upload_photo():
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
         return Response('OK')
 
+    print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
     return Response('Fail')
 
 def allowed_file(filename):
@@ -46,6 +47,22 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+
+@bp.route('/answer/', methods=['POST'])
+def add_response():
+    data = request.get_json()
+    print(data)
+    add_response_record(data['sheet_id'], data['answer_list'])
+    return 'OK'
+    
+def add_response_record(sheet_id, answer_list):
+    if sheet_id > 0 and answer_list: 
+        sheet = Sheet.query.filter_by(id=sheet_id).first()
+        new_response = Response(response_list=answer_list, sheets=sheet)
+        db.session.add(new_response)
+        db.session.commit()
+        return True
+    return False
 
 @bp.route('/check_login/', methods=['POST'])
 def check_login():
@@ -67,17 +84,17 @@ def check_login():
         print(colors.BLUE + 'Login success!' + colors.END)
         return Response("login_success")
 
-@bp.route('/list/<user_id>')
-def mobile_list_sheet(user_id):
+@bp.route('/list/<username>')
+def mobile_list_sheet(username):
     """
         Return user's sheets' id and title
     """
     print(colors.GREEN + '----- Mobile list -----' + colors.END)
-    print('user id ', user_id)
+    print('username ', username)
     ids = list()
     titles = list()
     
-    user = User.query.filter_by(id=user_id).first()
+    user = User.query.filter_by(username=username).first()
     for sheet in user.sheets:
         ids.append(sheet.id)
         titles.append(sheet.title)

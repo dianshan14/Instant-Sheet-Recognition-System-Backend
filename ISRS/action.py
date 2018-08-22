@@ -21,11 +21,14 @@ def generate_sheet():
         # if arg exist -> update
         # else gen
         user = User.query.filter_by(id=g.user.id).first()
-        sheet = Sheet(title=new_sheet['sheet_title'],
+        sheet = Sheet(sheet_type=new_sheet['sheet_type'],
+                      title=new_sheet['sheet_title'],
                       question_number=int(new_sheet['total_ques_num']),
+                      footer=new_sheet['sheet_footer'],
                       users=user)
         for question in new_sheet['ques_set']:
-            Question(question_title=question['problem'],
+            Question(question_order=question['prob_num'],
+                     question_title=question['problem'],
                      option_title=question['options'],
                      sheets=sheet)
         db.session.add(sheet)
@@ -96,22 +99,38 @@ def visualize_sheet_json(sheet_id):
 
         # if everything is empty ?
 
-        for question in sheet.questions:
-            question_titles.append(question.question_title)
-            option_titles.append(question.option_title)
+        """
+        for question in sheet.questions: # all questions belong to this sheet
+            question_titles.append(question.question_title) # collect all question title
+            option_titles.append(question.option_title) # collect all option title
             response_sum = dict()
             for num in range(1, len(question.option_title)+1):
-                response_sum[str(num)] = 0
-            response_conclude.append(response_sum)
+                response_sum[str(num)] = 0 # spell specific question and its option '1', '2', '3',...
+            response_conclude.append(response_sum) # order is question order
+
+        # collect responses
+        for response in sheet.responses:
+            for i, choose in enumerate(response.response_list):
+                response_conclude[i][str(choose)] += 1
+        """
+
+        for question in sheet.questions:
+            question_titles.append(question.question_title)
+            
+            question_object = list()
+            for option_title in question.option_title:
+                option_object = dict()
+                option_object['description'] = option_title
+                option_object['value'] = 0
+                question_object.append(option_object)
+            response_conclude.append(question_object)
 
         for response in sheet.responses:
-            for i, choose in enumerate(response):
-                response_conclude[i][str(choose)] += 1
+            for i, choose in enumerate(response.response_list):
+                response_conclude[i][choose-1]['value'] += 1
 
         return jsonify(title=sheet.title,
-                       question_number=sheet.question_number, # 數量
                        question_title=question_titles,
-                       option_titles=option_titles,
                        response_conclude=response_conclude
                       )
     
