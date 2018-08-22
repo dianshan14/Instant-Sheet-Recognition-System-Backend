@@ -66,6 +66,8 @@ def login():
 
 @bp.before_app_request
 def load_logging_in_user_data():
+    print(colors.YELLOW + '----- Request header -----' + colors.END)
+    print(request.headers)
     user_id = session.get('user_id')
     if user_id is None:
         g.user = None
