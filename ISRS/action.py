@@ -41,7 +41,7 @@ def generate_sheet():
 
     return render_template('template.html')
 
-@bp.route('/list/')
+@bp.route('/list/', methods=('GET',))
 @force_login('action.list_sheet')
 def list_sheet():
     """
@@ -70,7 +70,7 @@ def list_sheet_json():
                    )
 
 
-@bp.route('/visualize/<sheet_id>/', methods=('GET', 'POST'))
+@bp.route('/visualize/<sheet_id>/', methods=('GET',))
 @force_login('action.visualize_sheet')
 def visualize_sheet(sheet_id):
     """
@@ -82,7 +82,7 @@ def visualize_sheet(sheet_id):
     
     return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
 
-@bp.route('/visualize_json/<sheet_id>/')
+@bp.route('/visualize_json/<sheet_id>/', methods=('GET',))
 @force_login('action.visualize_sheet_json')
 def visualize_sheet_json(sheet_id):
     """ JSON response about sheet of specific user """
@@ -123,7 +123,7 @@ def visualize_sheet_json(sheet_id):
     # sheet does not belong to this user
     abort(401)
 
-@bp.route('/about')
+@bp.route('/about/', methods=('GET',))
 def about():
     return render_template('about.html', about='menu-active')
 
