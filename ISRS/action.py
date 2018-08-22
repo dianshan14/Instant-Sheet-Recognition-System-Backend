@@ -138,10 +138,12 @@ def visualize_sheet_json(sheet_id):
             for i, choose in enumerate(response.response_list):
                 response_conclude[i][choose-1]['value'] += 1
 
-        return jsonify(title=sheet.title,
+        res = jsonify(title=sheet.title,
                        question_title=question_titles,
                        response_conclude=response_conclude
                       )
+        res.headers['Access-Control-Allow-Origin'] = '*'
+        return res
     
     # sheet does not belong to this user
     abort(401)
