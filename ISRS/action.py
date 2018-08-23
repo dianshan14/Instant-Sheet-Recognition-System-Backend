@@ -1,10 +1,10 @@
 import functools
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, abort
+    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, abort, Response
 )
 
 from ISRS.auth import force_login
-from ISRS.model import db, User, Sheet, Question, Response
+from ISRS.model import db, User, Sheet, Question
 from ISRS.color import colors
 
 bp = Blueprint('action', __name__, url_prefix='/action')
