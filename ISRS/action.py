@@ -23,7 +23,8 @@ def generate_sheet():
         user = User.query.filter_by(id=g.user.id).first()
         sheet = Sheet(sheet_type=new_sheet['sheet_type'],
                       title=new_sheet['sheet_title'],
-                      question_number=int(new_sheet['total_ques_num']),
+                      question_number=new_sheet['total_ques_num'],
+                      option_number=new_sheet['total_opt_num'],
                       footer=new_sheet['sheet_footer'],
                       users=user)
         for question in new_sheet['ques_set']:
@@ -41,6 +42,76 @@ def generate_sheet():
 
     return render_template('template.html')
 
+@bp.route('/edit/<sheet_id>/', methods=('GET', 'POST'))
+@force_login('action.update_sheet')
+def update_sheet(sheet_id):
+    """
+        Get data of generated sheet
+    """
+    if request.method == 'POST':
+        new_sheet = request.get_json()
+
+        sheet = Sheet.query.filter_by(id=sheet_id).first()
+        sheet.sheet_type=new_sheet['sheet_type']
+        sheet.title=new_sheet['sheet_title'],
+        sheet.question_number=int(new_sheet['total_ques_num']),
+        sheet.footer=new_sheet['sheet_footer'],
+
+        # consider amount of questions!
+        for old, new in zip(sheet.questions, new_sheet): # update
+            old.question_order = new['prob_num']
+            old.question_title = new['problem']
+            old.option_title = new['options']
+
+        old_length = len(sheet.questions)
+        new_length = len(new_sheet['ques_set'])
+
+        if old_length > new_length: # reduce
+            reduce_number = old_length - new_length
+            for i in range(new_length, new_length + reduce_number):
+                db.session.delete(sheet.questions[i])
+        elif old_length < new_length: # generate
+            generate_number = new_length - old_length
+            for i in range(old_length, old_length + generate_number):
+                question = new_sheet['ques_set'][i]
+                Question(question_order=question['prob_num'],
+                         question_title=question['problem'],
+                         option_title=question['options'],
+                         sheets=sheet)
+
+        db.session.add(sheet)
+        db.session.commit()
+
+        return redirect(url_for('action.list_sheet'))
+        
+    return render_template('edit.html')
+
+@bp.route('/edit_json/<sheet_id>/', methods=('GET',))
+@force_login('action.update_sheet_json')
+def update_sheet_json(sheet_id):
+    sheet = Sheet.query.filter_by(id=sheet_id).first()
+    res = jsonify(
+        sheet_title=sheet.title,
+        sheet_footer=sheet.footer,
+        sheet_type=sheet.sheet_type,
+        total_ques_num=sheet.question_number,
+        total_opt_num=sheet.option_number,
+        ques_set=[
+            {
+                "prob_num": i + 1,
+                "problem": sheet.questions[i].question_title,
+                "options" : [
+                    {
+                        "opt_num": j + 1,
+                        "description": option
+                    } for j, option in enumerate(sheet.questions[i].option_title)
+                ]
+            } for i in range(len(sheet.questions))
+        ]
+    )
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    return res
+
 @bp.route('/list/', methods=('GET',))
 @force_login('action.list_sheet')
 def list_sheet():
@@ -48,6 +119,7 @@ def list_sheet():
         List sheet which belong to logged-in user
     """
     # TODO: Return all sheet of logged-in user
+    # TODO
     # return render_template('list_sheet.html')
 
     return '<h1 style="text-align: center;">List Sheet</h1>'
@@ -116,9 +188,9 @@ def visualize_sheet_json(sheet_id):
                 response_conclude[i][choose-1]['value'] += 1
 
         res = jsonify(title=sheet.title,
-                       question_title=question_titles,
-                       response_conclude=response_conclude
-                      )
+                      question_title=question_titles,
+                      response_conclude=response_conclude
+                     )
         res.headers['Access-Control-Allow-Origin'] = '*'
         return res
     

@@ -57,7 +57,7 @@ def login():
             session.clear()
             session['user_id'] = user.id
             print(colors.GREEN + 'Login success' + colors.END)
-            return redirect(url_for(endpoint))
+            return redirect(url_for(endpoint, sheet_id=request.args.get('sheet_id')))
 
         flash(error_msg)
         print(colors.RED + 'Login fail' + colors.END)
@@ -87,7 +87,7 @@ def force_login(endpoint):
             """if not logged in, redirect to login page"""
             if g.user is None:
                 session['next'] = endpoint
-                return redirect(url_for('auth.login'))
+                return redirect(url_for('auth.login', sheet_id=kwargs.get('sheet_id')))
             return view(**kwargs)
         return wrapped_view
     return deco

@@ -19,6 +19,7 @@ class Sheet(db.Model):
     sheet_type = db.Column(db.Integer, nullable=False)
     title = db.Column(db.Text, nullable=False)
     question_number = db.Column(db.Integer, nullable=False)
+    option_number = db.Column(db.Integer, nullable=False)
     footer = db.Column(db.Text, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey('sheet_user.id'))
@@ -35,7 +36,6 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_order = db.Column(db.Integer, nullable=False)
     question_title = db.Column(db.Text, nullable=False)
-    # option_number = db.Column(db.Integer, nullable=False)
     option_title = db.Column(db.ARRAY(db.Text), nullable=False)
 
     sheet_id = db.Column(db.Integer, db.ForeignKey('sheet.id'))
