@@ -41,7 +41,10 @@ def generate_sheet():
         db.session.add(sheet)
         db.session.commit()
 
-        return redirect(url_for('action.list_sheet'))
+        res = redirect(url_for('action.list_sheet'))
+        res.headers['Access-Control-Allow-Origin'] = '*'
+
+        return res
         
     # TODO: store JSON data into sheet table
     # return redirect(url_for('action.list_sheet'))
@@ -96,7 +99,9 @@ def update_sheet(sheet_id):
         db.session.add(sheet)
         db.session.commit()
 
-        return redirect(url_for('action.list_sheet'))
+        res = redirect(url_for('action.list_sheet'))
+        res.headers['Access-Control-Allow-Origin'] = '*'
+        return res
         
     return render_template('edit.html')
 
