@@ -65,9 +65,11 @@ def list_sheet_json():
         sheet_ids.append(sheet.id)
         sheet_titles.append(sheet.title)
 
-    return jsonify(sheet_ids=sheet_ids,
-                   sheet_titles=sheet_titles
-                   )
+    res = jsonify(sheet_ids=sheet_ids,
+                  sheet_titles=sheet_titles
+                 )
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    return res
 
 
 @bp.route('/visualize/<sheet_id>/', methods=('GET',))
