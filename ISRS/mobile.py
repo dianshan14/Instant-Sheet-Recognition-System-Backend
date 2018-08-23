@@ -13,10 +13,12 @@ import os
 
 bp = Blueprint('mobile', __name__, url_prefix='/mobile')
 
-@bp.route('/recognition/', methods=['POST'])
-def upload_photo():
+@bp.route('/recognition/<username>/', methods=['POST'])
+def upload_photo(username):
     """
         upload photo from mobile phone and recognize this photo
+        args:
+            username: For checking login!
     """
     print(colors.GREEN + '----- Mobile Upload file -----' + colors.END)
     print(request.files) # many file
@@ -36,7 +38,7 @@ def upload_photo():
         uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(colors.BLUE + 'File saved to '
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
-        return Response('OK')
+        return Response(filename.split('.')[-2].split('_')[-1])
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
     return Response('Fail')
@@ -69,7 +71,6 @@ def add_response_record(sheet_id, answer_list):
 def check_login():
     """
         check user login.
-        Response: 0 is not logged-in, otherwise return user_id
     """
     print(colors.GREEN + '----- Mobile check login -----' + colors.END)
     username = request.form['username']
@@ -92,12 +93,9 @@ def mobile_list_sheet(username):
     """
     print(colors.GREEN + '----- Mobile list -----' + colors.END)
     print('username ', username)
-    ids = list()
-    titles = list()
     
     user = User.query.filter_by(username=username).first()
-    for sheet in user.sheets:
-        ids.append(sheet.id)
-        titles.append(sheet.title)
+    ids = [sheet.id for sheet in user.sheets]
+    titles = [sheet.title for sheet in user.sheets]
 
     return jsonify(ids=ids, titles=titles)

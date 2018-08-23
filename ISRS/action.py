@@ -9,7 +9,15 @@ from ISRS.color import colors
 
 bp = Blueprint('action', __name__, url_prefix='/action')
 
-@bp.route('/gen/', methods=('GET', 'POST'))
+@bp.route('/gen/', methods=['OPTIONS'])
+def gen_option():
+    res = Response("OK")
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    res.headers['Access-Control-Allow-Methods'] = 'GET,POST'
+    res.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return res
+
+@bp.route('/gen/', methods=('GET', 'POST'), provide_automatic_options=False)
 @force_login('action.generate_sheet')
 def generate_sheet():
     """
@@ -18,8 +26,6 @@ def generate_sheet():
     if request.method == 'POST':
         new_sheet = request.get_json()
 
-        # if arg exist -> update
-        # else gen
         user = User.query.filter_by(id=g.user.id).first()
         sheet = Sheet(sheet_type=new_sheet['sheet_type'],
                       title=new_sheet['sheet_title'],
@@ -42,7 +48,15 @@ def generate_sheet():
 
     return render_template('template.html')
 
-@bp.route('/edit/<sheet_id>/', methods=('GET', 'POST'))
+@bp.route('/edit/<sheet_id>/', methods=['OPTIONS'])
+def edit_option():
+    res = Response("OK")
+    res.headers['Access-Control-Allow-Origin'] = '*'
+    res.headers['Access-Control-Allow-Methods'] = 'GET,POST'
+    res.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return res
+
+@bp.route('/edit/<sheet_id>/', methods=('GET', 'POST'), provide_automatic_options=False)
 @force_login('action.update_sheet')
 def update_sheet(sheet_id):
     """
@@ -204,11 +218,6 @@ def about():
 @bp.route('/admin')
 def list_user():
     users = User.query.all()
-    data = dict()
-    data['username'] = list()
-    data['password'] = list()
-    for user in users:
-        data['username'].append(user.username)
-        data['password'].append(user.password)
-        print(user.username)
+    data = dict(username=[user.username for user in users], 
+                password=[user.password for user in users])
     return jsonify(data)
