@@ -25,23 +25,23 @@ def upload_photo(username):
 
     if 'file' not in request.files:
         print(colors.RED + 'No file' + colors.END)
-        return Response('Fail')
+        return Response('fail')
 
     uploaded_file = request.files['file']
 
     if uploaded_file.filename == '':
         print(colors.RED + 'No selected file' + colors.END)
-        return Response('Fail')
+        return Response('fail')
     
     if uploaded_file and allowed_file(uploaded_file.filename):
         filename = secure_filename(uploaded_file.filename)
         uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(colors.BLUE + 'File saved to '
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
-        return Response(filename.split('.')[-2].split('_')[-1])
+        return Response(filename.split('.')[-2].split('_')[-1]) # recognition success
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
-    return Response('Fail')
+    return Response('fail')
 
 def allowed_file(filename):
     """

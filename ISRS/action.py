@@ -70,31 +70,19 @@ def update_sheet(sheet_id):
 
         sheet = Sheet.query.filter_by(id=sheet_id).first()
         sheet.sheet_type=new_sheet['sheet_type']
-        sheet.title=new_sheet['sheet_title'],
-        sheet.question_number=int(new_sheet['total_ques_num']),
-        sheet.footer=new_sheet['sheet_footer'],
+        sheet.title=new_sheet['sheet_title']
+        sheet.question_number= new_sheet['total_ques_num']
+        sheet.option_number = new_sheet['total_opt_num']
+        sheet.footer=new_sheet['sheet_footer']
 
-        # consider amount of questions!
-        for old, new in zip(sheet.questions, new_sheet): # update
-            old.question_order = new['prob_num']
-            old.question_title = new['problem']
-            old.option_title = new['options']
+        for removed_question in sheet.questions:
+            db.session.delete(removed_question)
 
-        old_length = len(sheet.questions)
-        new_length = len(new_sheet['ques_set'])
-
-        if old_length > new_length: # reduce
-            reduce_number = old_length - new_length
-            for i in range(new_length, new_length + reduce_number):
-                db.session.delete(sheet.questions[i])
-        elif old_length < new_length: # generate
-            generate_number = new_length - old_length
-            for i in range(old_length, old_length + generate_number):
-                question = new_sheet['ques_set'][i]
-                Question(question_order=question['prob_num'],
-                         question_title=question['problem'],
-                         option_title=question['options'],
-                         sheets=sheet)
+        for question in new_sheet['ques_set']:
+            Question(question_order=question['prob_num'],
+                     question_title=question['problem'],
+                     option_title=question['options'],
+                     sheets=sheet)
 
         db.session.add(sheet)
         db.session.commit()
