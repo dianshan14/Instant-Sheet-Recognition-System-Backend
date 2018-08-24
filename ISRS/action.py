@@ -52,7 +52,7 @@ def generate_sheet():
     return render_template('template.html')
 
 @bp.route('/edit/<sheet_id>/', methods=['OPTIONS'])
-def edit_option():
+def edit_option(sheet_id):
     res = Response("OK")
     res.headers['Access-Control-Allow-Origin'] = '*'
     res.headers['Access-Control-Allow-Methods'] = 'GET,POST'
