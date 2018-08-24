@@ -78,6 +78,11 @@ def update_sheet(sheet_id):
         for removed_question in sheet.questions:
             db.session.delete(removed_question)
 
+        for removed_response in sheet.responses:
+            db.session.delete(removed_response)
+
+        db.session.commit()
+
         for question in new_sheet['ques_set']:
             Question(question_order=question['prob_num'],
                      question_title=question['problem'],
@@ -137,12 +142,9 @@ def list_sheet_json():
     """ JSON response about sheet of specific user """
     user = User.query.filter_by(id=g.user.id).first()
     sheets = user.sheets
-    sheet_ids = list()
-    sheet_titles = list()
 
-    for sheet in sheets:
-        sheet_ids.append(sheet.id)
-        sheet_titles.append(sheet.title)
+    sheet_ids = [sheet.id for sheet in sheets]
+    sheet_titles = [sheet.title for sheet in sheets]
 
     res = jsonify(sheet_ids=sheet_ids,
                   sheet_titles=sheet_titles
@@ -174,21 +176,17 @@ def visualize_sheet_json(sheet_id):
         abort(404)
 
     if g.user.id == sheet.user_id:
-        question_titles = list()
-        response_conclude = list()
 
         # if everything is empty ?
-
-        for question in sheet.questions:
-            question_titles.append(question.question_title)
-            
-            question_object = list()
-            for option_title in question.option_title:
-                option_object = dict()
-                option_object['description'] = option_title
-                option_object['value'] = 0
-                question_object.append(option_object)
-            response_conclude.append(question_object)
+        question_titles = [question.question_title for question in sheet.questions]
+        response_conclude = [
+            [
+                {
+                    'description': option_title,
+                    'value': 0,
+                } for option_title in question.option_title
+            ] for question in sheet.questions
+        ]
 
         for response in sheet.responses:
             for i, choose in enumerate(response.response_list):

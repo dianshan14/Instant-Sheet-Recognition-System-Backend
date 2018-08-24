@@ -86,7 +86,7 @@ def check_login():
         print(colors.BLUE + 'Login success!' + colors.END)
         return Response("login_success")
 
-@bp.route('/list/<username>')
+@bp.route('/list/<username>/')
 def mobile_list_sheet(username):
     """
         Return user's sheets' id and title
