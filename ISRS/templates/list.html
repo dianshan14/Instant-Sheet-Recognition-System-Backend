@@ -10,24 +10,18 @@
         crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='src/css/nav.css') }}"></link>
-    <link rel="stylesheet" href="{{ url_for('static', filename='src/css/result.css') }}"></link>
-    <link rel="stylesheet" href="{{ url_for('static', filename='src/css/d3-tip.css') }}"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='src/css/list.css') }}"></link>
 {% endblock %}
 
 {% block section %}
-    <section id="resultApp">
+    <section id="listApp">
 
     </section>
 {% endblock %}
 
 {% block end_body_script %}
-    <script>
-        sessionStorage.sheet_id = {{ sheet_id }}
-    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='src/js/nav.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='src/js/d3-tip.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='dist/resultBundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='dist/listBundle.js') }}"></script>
 {% endblock %}

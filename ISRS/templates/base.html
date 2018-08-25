@@ -14,7 +14,7 @@
                 {% if g.user %}
                     <a href="{{ url_for('auth.logout') }}">Logout</a>
                     <a href="{{ url_for('action.about') }}"class="{{ about }}">About us</a>
-                    <a href="#">Hello, {{ g.user['username'] }}</a>
+                    <a href="{{ url_for('action.list_sheet') }}">Hello, {{ g.user['username'] }}</a>
                 {% else %}
                     <a href="{{ url_for('auth.login') }}"class="{{ login }}">Login</a>
                     <a href="{{ url_for('auth.register') }}"class="{{ register }}">Sign up</a>

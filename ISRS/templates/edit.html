@@ -5,6 +5,8 @@
     <title>ISRS - Create Template</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/css/nav.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='src/css/template.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='src/images/favicon.ico') }}" />
+    <link rel="bookmark" href="{{ url_for('static', filename='src/images/favicon.ico') }}" />
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9"
         crossorigin="anonymous">
@@ -13,17 +15,20 @@
     <script src="https://cdn.rawgit.com/MrRio/jsPDF/master/libs/html2pdf.js"></script>
     <script src="https://cdn.rawgit.com/MrRio/jsPDF/master/libs/html2canvas/dist/html2canvas.js"></script>
 {% endblock %}
-
-{% block section %}
     <section id="recognition">
+
     </section>
+{% block section %}
+
 {% endblock %}
 
 {% block end_body_script %}
+    <script>
+        sessionStorage.sheet_id = {{ sheet_id }}
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='src/js/nav.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='dist/recognitionBundle.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='dist/editBundle.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='src/js/template.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='src/js/fill-color.js') }}"></script>
 {% endblock %}

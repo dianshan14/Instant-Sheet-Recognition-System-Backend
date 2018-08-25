@@ -96,7 +96,7 @@ def update_sheet(sheet_id):
         res.headers['Access-Control-Allow-Origin'] = '*'
         return res
         
-    return render_template('edit.html')
+    return render_template('edit.html', sheet_id=sheet_id)
 
 @bp.route('/edit_json/<sheet_id>/', methods=('GET',))
 @force_login('action.update_sheet_json')
@@ -132,9 +132,9 @@ def list_sheet():
     """
     # TODO: Return all sheet of logged-in user
     # TODO
-    # return render_template('list_sheet.html')
+    return render_template('list.html')
 
-    return '<h1 style="text-align: center;">List Sheet</h1>'
+    # return '<h1 style="text-align: center;">List Sheet</h1>'
 
 @bp.route('/list_json/', methods=('GET',))
 @force_login('action.list_sheet_json')
@@ -161,9 +161,9 @@ def visualize_sheet(sheet_id):
     """
 
     # TODO : check 'sheet_id' whether belong to current logged-in user
-    # return render_template('visualize_sheet.html')
+    return render_template('result.html', sheet_id=sheet_id)
     
-    return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
+    #return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
 
 @bp.route('/visualize_json/<sheet_id>/', methods=('GET',))
 @force_login('action.visualize_sheet_json')

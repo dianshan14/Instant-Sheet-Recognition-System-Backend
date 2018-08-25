@@ -66,8 +66,8 @@ def login():
 
 @bp.before_app_request
 def load_logging_in_user_data():
-    print(colors.YELLOW + '----- Request header -----' + colors.END)
-    print(request.headers)
+    #print(colors.YELLOW + '----- Request header -----' + colors.END)
+    #print(request.headers)
     user_id = session.get('user_id')
     if user_id is None:
         g.user = None
@@ -87,6 +87,7 @@ def force_login(endpoint):
             """if not logged in, redirect to login page"""
             if g.user is None:
                 session['next'] = endpoint
+                print("NO")
                 return redirect(url_for('auth.login', sheet_id=kwargs.get('sheet_id')))
             return view(**kwargs)
         return wrapped_view
