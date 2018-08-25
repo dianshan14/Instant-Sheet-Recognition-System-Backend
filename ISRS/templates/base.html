@@ -13,12 +13,12 @@
                 <a href="{{ url_for('index') }}" class="{{ index }}">ISRS</a>
                 {% if g.user %}
                     <a href="{{ url_for('auth.logout') }}">Logout</a>
-                    <a href="{{ url_for('action.about') }}"class="{{ about }}">About us</a>
-                    <a href="{{ url_for('action.list_sheet') }}">Hello, {{ g.user['username'] }}</a>
+                    <a href="{{ url_for('action.about') }}" class="{{ about }}">About us</a>
+                    <a href="{{ url_for('action.list_sheet') }} " class="{{ list }}>{{ g.user['username'] }}'s list</a>
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}"class="{{ login }}">Login</a>
-                    <a href="{{ url_for('auth.register') }}"class="{{ register }}">Sign up</a>
-                    <a href="{{ url_for('action.about') }}"class="{{ about }}">About us</a>
+                    <a href="{{ url_for('auth.login') }}" class="{{ login }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}" class="{{ register }}">Sign up</a>
+                    <a href="{{ url_for('action.about') }}" class="{{ about }}">About us</a>
                 {% endif %}
                 <a href="javascript:void(0);" class="icon" onclick="responsive_nav()">
                     <i class="fa fa-bars"></i>

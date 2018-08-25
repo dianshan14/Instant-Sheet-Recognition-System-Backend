@@ -132,7 +132,7 @@ def list_sheet():
     """
     # TODO: Return all sheet of logged-in user
     # TODO
-    return render_template('list.html')
+    return render_template('list.html', list='menu-active')
 
     # return '<h1 style="text-align: center;">List Sheet</h1>'
 
