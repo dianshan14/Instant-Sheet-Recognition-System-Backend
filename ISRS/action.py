@@ -140,6 +140,7 @@ def list_sheet():
 @force_login('action.list_sheet_json')
 def list_sheet_json():
     """ JSON response about sheet of specific user """
+    print(colors.GREEN + 'List : User ' + str(g.user.id) + colors.END)
     user = User.query.filter_by(id=g.user.id).first()
     sheets = user.sheets
 
