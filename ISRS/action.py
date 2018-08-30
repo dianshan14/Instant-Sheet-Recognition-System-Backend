@@ -45,7 +45,7 @@ def generate_sheet():
         res.headers['Access-Control-Allow-Origin'] = '*'
 
         return res
-        
+
     # TODO: store JSON data into sheet table
     # return redirect(url_for('action.list_sheet'))
 
@@ -95,7 +95,7 @@ def update_sheet(sheet_id):
         res = redirect(url_for('action.list_sheet'))
         res.headers['Access-Control-Allow-Origin'] = '*'
         return res
-        
+
     return render_template('edit.html', sheet_id=sheet_id)
 
 @bp.route('/edit_json/<sheet_id>/', methods=('GET',))
@@ -121,7 +121,6 @@ def update_sheet_json(sheet_id):
             } for i in range(len(sheet.questions))
         ]
     )
-    res.headers['Access-Control-Allow-Origin'] = '*'
     return res
 
 @bp.route('/list/', methods=('GET',))
@@ -150,7 +149,6 @@ def list_sheet_json():
     res = jsonify(sheet_ids=sheet_ids,
                   sheet_titles=sheet_titles
                  )
-    res.headers['Access-Control-Allow-Origin'] = '*'
     return res
 
 
@@ -163,7 +161,7 @@ def visualize_sheet(sheet_id):
 
     # TODO : check 'sheet_id' whether belong to current logged-in user
     return render_template('result.html', sheet_id=sheet_id)
-    
+
     #return '<h1 style="text-align: center;">Visualize' + sheet_id + '</h1>'
 
 @bp.route('/visualize_json/<sheet_id>/', methods=('GET',))
@@ -171,7 +169,7 @@ def visualize_sheet(sheet_id):
 def visualize_sheet_json(sheet_id):
     """ JSON response about sheet of specific user """
     sheet = Sheet.query.filter_by(id=sheet_id).first()
-    
+
     # No this sheet id
     if sheet is None:
         abort(404)
@@ -197,9 +195,8 @@ def visualize_sheet_json(sheet_id):
                       question_title=question_titles,
                       response_conclude=response_conclude
                      )
-        res.headers['Access-Control-Allow-Origin'] = '*'
         return res
-    
+
     # sheet does not belong to this user
     abort(401)
 
@@ -210,6 +207,6 @@ def about():
 @bp.route('/admin')
 def list_user():
     users = User.query.all()
-    data = dict(username=[user.username for user in users], 
+    data = dict(username=[user.username for user in users],
                 password=[user.password for user in users])
     return jsonify(data)
