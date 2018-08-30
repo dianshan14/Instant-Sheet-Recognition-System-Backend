@@ -32,13 +32,13 @@ def upload_photo(username):
     if uploaded_file.filename == '':
         print(colors.RED + 'No selected file' + colors.END)
         return Response('fail')
-    
+
     if uploaded_file and allowed_file(uploaded_file.filename):
         filename = secure_filename(uploaded_file.filename)
         uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(colors.BLUE + 'File saved to '
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
-        return Response(filename.split('.')[-2].split('_')[-1]) # recognition success
+        return Response('success') # recognition success
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
     return Response('fail')
@@ -57,9 +57,9 @@ def add_response():
     print(data)
     add_response_record(data['sheet_id'], data['answer_list'])
     return 'OK'
-    
+
 def add_response_record(sheet_id, answer_list):
-    if sheet_id > 0 and answer_list: 
+    if sheet_id > 0 and answer_list:
         sheet = Sheet.query.filter_by(id=sheet_id).first()
         new_response = db_Response(response_list=answer_list, sheets=sheet)
         db.session.add(new_response)
@@ -93,7 +93,7 @@ def mobile_list_sheet(username):
     """
     print(colors.GREEN + '----- Mobile list -----' + colors.END)
     print('username ', username)
-    
+
     user = User.query.filter_by(username=username).first()
     ids = [sheet.id for sheet in user.sheets]
     titles = [sheet.title for sheet in user.sheets]

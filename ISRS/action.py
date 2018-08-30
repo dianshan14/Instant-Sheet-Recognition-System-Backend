@@ -102,7 +102,7 @@ def update_sheet(sheet_id):
 @force_login('action.update_sheet_json')
 def update_sheet_json(sheet_id):
     sheet = Sheet.query.filter_by(id=sheet_id).first()
-    res = jsonify(
+    return jsonify(
         sheet_title=sheet.title,
         sheet_footer=sheet.footer,
         sheet_type=sheet.sheet_type,
@@ -121,7 +121,6 @@ def update_sheet_json(sheet_id):
             } for i in range(len(sheet.questions))
         ]
     )
-    return res
 
 @bp.route('/list/', methods=('GET',))
 @force_login('action.list_sheet')
@@ -143,13 +142,12 @@ def list_sheet_json():
     user = User.query.filter_by(id=g.user.id).first()
     sheets = user.sheets
 
-    sheet_ids = [sheet.id for sheet in sheets]
-    sheet_titles = [sheet.title for sheet in sheets]
+    sheet_ids = list(reversed([sheet.id for sheet in sheets]))
+    sheet_titles = list(reversed([sheet.title for sheet in sheets]))
 
-    res = jsonify(sheet_ids=sheet_ids,
-                  sheet_titles=sheet_titles
-                 )
-    return res
+    return jsonify(sheet_ids=sheet_ids,
+                   sheet_titles=sheet_titles
+                  )
 
 
 @bp.route('/visualize/<sheet_id>/', methods=('GET',))
@@ -191,11 +189,10 @@ def visualize_sheet_json(sheet_id):
             for i, choose in enumerate(response.response_list):
                 response_conclude[i][choose-1]['value'] += 1
 
-        res = jsonify(title=sheet.title,
-                      question_title=question_titles,
-                      response_conclude=response_conclude
-                     )
-        return res
+        return jsonify(title=sheet.title,
+                       question_title=question_titles,
+                       response_conclude=response_conclude
+                      )
 
     # sheet does not belong to this user
     abort(401)
