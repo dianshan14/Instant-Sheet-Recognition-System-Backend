@@ -26,13 +26,13 @@ def upload_photo(username):
 
     if 'file' not in request.files:
         print(colors.RED + 'No file' + colors.END)
-        return Response('fail')
+        return Response('file_failed')
 
     uploaded_file = request.files['file']
 
     if uploaded_file.filename == '':
         print(colors.RED + 'No selected file' + colors.END)
-        return Response('fail')
+        return Response('file_failed')
 
     if uploaded_file and allowed_file(uploaded_file.filename):
         filename = secure_filename(uploaded_file.filename)
@@ -45,10 +45,13 @@ def upload_photo(username):
         sheet = Sheet.query.filter_by(id=sheet_id).first()
         sheet_type = sheet.sheet_type
 
-        # TODO : check whether answer is valid
-        # TODO : os.path, sheet_type 1 or 2,
-        # TODO : login user
+        # TODO : check whether answer is valid -> recognition_failed
+        # OK TODO : os.path
+        # TODO sheet_type 1 or 2,
+        # OK TODO : login user
         sheet_answer = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
+        if not sheet_answer:
+            return Response('recognition_failed')
         print(colors.RED + 'Answer: ', end='')
         print(sheet_answer, end='')
         print(colors.END)
@@ -56,7 +59,7 @@ def upload_photo(username):
         return Response('success') # recognition success
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
-    return Response('fail')
+    return Response('file_failed')
 
 def allowed_file(filename):
     """
