@@ -55,6 +55,7 @@ def upload_photo(username):
         print(colors.RED + 'Answer: ', end='')
         print(sheet_answer, end='')
         print(colors.END)
+        add_response_record(sheet_id, sheet_answer)
 
         return Response('success') # recognition success
 
