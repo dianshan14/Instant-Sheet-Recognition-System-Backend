@@ -40,7 +40,7 @@ def upload_photo(username):
         uploaded_file.save(saved_filename)
         sheet_id = int(filename.split('_')[0])
         print(colors.BLUE + 'File saved to '
-              + saved_filename + ', sheet_id: ' + sheet_id + colors.END)
+              + saved_filename + ', sheet_id: ' + str(sheet_id) + colors.END)
 
         sheet = Sheet.query.filter_by(id=sheet_id).first()
         sheet_type = sheet.sheet_type
