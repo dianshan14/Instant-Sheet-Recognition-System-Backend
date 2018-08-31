@@ -49,7 +49,9 @@ def upload_photo(username):
         # TODO : os.path, sheet_type 1 or 2,
         # TODO : login user
         sheet_answer = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
-        print(colors.RED + 'Answer: ' + sheet_answer + colors.END)
+        print(colors.RED + 'Answer: ', end='')
+        print(sheet_answer, end='')
+        print(colors.END)
 
         return Response('success') # recognition success
 
