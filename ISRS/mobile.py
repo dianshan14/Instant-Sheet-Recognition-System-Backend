@@ -36,13 +36,21 @@ def upload_photo(username):
 
     if uploaded_file and allowed_file(uploaded_file.filename):
         filename = secure_filename(uploaded_file.filename)
-        uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        saved_filename = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        uploaded_file.save(saved_filename)
+        sheet_id = int(filename.split('_')[0])
         print(colors.BLUE + 'File saved to '
-              + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
+              + saved_filename, filename) + ', sheet_id: ' + sheet_id + colors.END)
+
+        sheet = Sheet.query.filter_by(id=sheet_id).first()
+        sheet_type = sheet.sheet_type
 
         # TODO : check whether answer is valid
         # TODO : os.path, sheet_type 1 or 2,
         # TODO : login user
+        sheet_answer = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
+        print(colors.RED + 'Answer: ' + sheet_answer + colors.END)
+
         return Response('success') # recognition success
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
@@ -55,9 +63,6 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
-
-def sheet_recognition_type_one(filename, total_ques_num, total_opt_num):
-    pass
 
 @bp.route('/answer/', methods=['POST'])
 def add_response():
