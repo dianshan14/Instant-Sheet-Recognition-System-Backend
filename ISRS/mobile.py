@@ -8,6 +8,7 @@ from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet
 from ISRS.model import Response as db_Response
 from ISRS.color import colors
+from ISRS.sheet_detect.detect_row import sheet_recognition_type_one
 
 import os
 
@@ -38,6 +39,10 @@ def upload_photo(username):
         uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(colors.BLUE + 'File saved to '
               + os.path.join(current_app.config['UPLOAD_FOLDER'], filename) + colors.END)
+
+        # TODO : check whether answer is valid
+        # TODO : os.path, sheet_type 1 or 2,
+        # TODO : login user
         return Response('success') # recognition success
 
     print(colors.RED + 'File extension not allowed or file not exist' + colors.END)
@@ -50,6 +55,9 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+
+def sheet_recognition_type_one(filename, total_ques_num, total_opt_num):
+    pass
 
 @bp.route('/answer/', methods=['POST'])
 def add_response():
