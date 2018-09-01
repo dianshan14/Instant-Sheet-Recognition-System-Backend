@@ -1,11 +1,13 @@
 import functools
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, abort, Response
+    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, abort, Response, current_app
 )
 
 from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet, Question
 from ISRS.color import colors
+
+import os
 
 bp = Blueprint('action', __name__, url_prefix='/action')
 
@@ -197,6 +199,19 @@ def visualize_sheet_json(sheet_id):
 
     # sheet does not belong to this user
     abort(401)
+
+@bp.route('/response_csv/<sheet_id>/', methods=('GET',))
+@force_login('action.response_csv')
+def response_csv(sheet_id):
+    """
+        Return csv file response
+        filename: sheet_title.csv
+    """
+    sheet = Sheet.query.filter_by(id=sheet_id).first()
+    with current_app.open_resource('csv_conclude/'+sheet.title+'.csv', 'w') as f:
+        f.write('hi')
+
+    return send_from_directory(os.path.join(current_app.root_path, 'csv_conclude'), sheet.title+'.csv.')
 
 @bp.route('/about/', methods=('GET',))
 def about():
