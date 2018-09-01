@@ -94,7 +94,7 @@ def add_response_record(sheet_id, answer_list):
     if sheet_id > 0 and answer_list:
         sheet = Sheet.query.filter_by(id=sheet_id).first()
         new_response = db_Response(response_list=answer_list,
-                                   created_at=datetime.utcnow()+timedelta(hours=8)
+                                   created_at=datetime.utcnow()+timedelta(hours=8),
                                    sheets=sheet)
         db.session.add(new_response)
         db.session.commit()
