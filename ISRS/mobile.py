@@ -63,7 +63,7 @@ def upload_photo(username):
         elif sheet_answer_wei != sheet_answer_sam:
             return Response('recognition_failed')
         else:
-            add_response_record(sheet_id, sheet_answer)
+            add_response_record(sheet_id, sheet_answer_wei)
 
         return Response('success') # recognition success
 
