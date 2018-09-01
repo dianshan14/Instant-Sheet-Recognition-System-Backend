@@ -50,7 +50,7 @@ class Response(db.Model):
     __tablename__ = 'response'
     id = db.Column(db.Integer, primary_key=True)
     response_list = db.Column(db.ARRAY(db.Integer), nullable=False)
-    response_time = db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False)
 
     sheet_id = db.Column(db.Integer, db.ForeignKey('sheet.id'))
 

@@ -4,6 +4,8 @@ from flask import (
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
+from datetime import datetime, timedelta
+
 from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet
 from ISRS.model import Response as db_Response
@@ -91,7 +93,9 @@ def add_response():
 def add_response_record(sheet_id, answer_list):
     if sheet_id > 0 and answer_list:
         sheet = Sheet.query.filter_by(id=sheet_id).first()
-        new_response = db_Response(response_list=answer_list, sheets=sheet)
+        new_response = db_Response(response_list=answer_list,
+                                   created_at=datetime.utcnow()+timedelta(hours=8)
+                                   sheets=sheet)
         db.session.add(new_response)
         db.session.commit()
         return True

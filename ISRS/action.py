@@ -186,7 +186,7 @@ def visualize_sheet_json(sheet_id):
         ]
 
         for response in sheet.responses:
-            print(response.response_time)
+            print(response.created_at)
             for i, choose in enumerate(response.response_list):
                 response_conclude[i][choose-1]['value'] += 1
 
