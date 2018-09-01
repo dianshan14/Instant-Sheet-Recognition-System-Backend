@@ -207,7 +207,7 @@ def response_csv(sheet_id):
         filename: sheet_title.csv
     """
     sheet = Sheet.query.filter_by(id=sheet_id).first()
-    with current_app.open_resource(current_app.config['CSV_FOLDER']+sheet.title+'.csv', 'w') as f:
+    with open(current_app.config['CSV_FOLDER']+sheet.title+'.csv', 'w') as f:
         f.write('hi')
 
     return send_from_directory(current_app.config['CSV_FOLDER'], sheet.title+'.csv.')
