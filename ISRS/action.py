@@ -7,7 +7,6 @@ from ISRS.auth import force_login
 from ISRS.model import db, User, Sheet, Question
 from ISRS.color import colors
 
-import os
 
 bp = Blueprint('action', __name__, url_prefix='/action')
 
@@ -208,10 +207,10 @@ def response_csv(sheet_id):
         filename: sheet_title.csv
     """
     sheet = Sheet.query.filter_by(id=sheet_id).first()
-    with current_app.open_resource('csv_conclude/'+sheet.title+'.csv', 'w') as f:
+    with current_app.open_resource(current_app.config['CSV_FOLDER']+sheet.title+'.csv', 'w') as f:
         f.write('hi')
 
-    return send_from_directory(os.path.join(current_app.root_path, 'csv_conclude'), sheet.title+'.csv.')
+    return send_from_directory(current_app.config['CSV_FOLDER'], sheet.title+'.csv.')
 
 @bp.route('/about/', methods=('GET',))
 def about():
