@@ -9,6 +9,7 @@ from ISRS.model import db, User, Sheet
 from ISRS.model import Response as db_Response
 from ISRS.color import colors
 from ISRS.sheet_detect.detect_row import sheet_recognition_type_one
+from ISRS.sheet_detect.hough import sheet_recognition_type_one_sam
 
 import os
 
@@ -49,13 +50,20 @@ def upload_photo(username):
         # OK TODO : os.path
         # TODO sheet_type 1 or 2,
         # OK TODO : login user
-        sheet_answer = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
-        if not sheet_answer:
-            return Response('recognition_failed')
-        print(colors.RED + 'Answer: ', end='')
-        print(sheet_answer, end='')
+        sheet_answer_wei = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
+        print(colors.BLUE + 'Wei answer: ', end='')
+        print(sheet_answer_wei, end='')
         print(colors.END)
-        add_response_record(sheet_id, sheet_answer)
+        sheet_answer_sam = sheet_recognition_type_one_sam(saved_filename, sheet.question_number, sheet.option_number)
+        print(colors.BLUE + 'Sam answer: ', end='')
+        print(sheet_answer_sam, end='')
+        print(colors.END)
+        if not sheet_answer_wei or not sheet_answer_sam:
+            return Response('recognition_failed')
+        elif sheet_answer_wei != sheet_answer_sam:
+            return Response('recognition_failed')
+        else:
+            add_response_record(sheet_id, sheet_answer)
 
         return Response('success') # recognition success
 
