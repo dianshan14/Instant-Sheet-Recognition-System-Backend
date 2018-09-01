@@ -59,10 +59,13 @@ def upload_photo(username):
         print(sheet_answer_sam, end='')
         print(colors.END)
         if not sheet_answer_wei or not sheet_answer_sam:
+            print(colors.YELLOW + 'Recognition failed' + colors.END)
             return Response('recognition_failed')
         elif sheet_answer_wei != sheet_answer_sam:
+            print(colors.YELLOW + 'Recognition failed' + colors.END)
             return Response('recognition_failed')
         else:
+            print(colors.GREEN + 'Recognition successed' + colors.END)
             add_response_record(sheet_id, sheet_answer_wei)
 
         return Response('success') # recognition success
