@@ -140,8 +140,12 @@ def mobile_list_sheet(username):
 def get_img():
     files = os.listdir(current_app.config['UPLOAD_FOLDER'])
     print(files)
-    return render_template('browser.html', files=files)
+    return render_template('browser.html', files=files, current_app=current_app)
 
 @bp.route('/imgs/<filename>/')
 def imgs(filename):
     return send_from_directory(directory=current_app.config['UPLOAD_FOLDER'], filename=filename, as_attachment=True)
+
+@bp.route('/show_img/<filename>/')
+def show_img(filename):
+    return send_from_directory(directory=current_app.config['UPLOAD_FOLDER'], filename=filename, as_attachment=False)
