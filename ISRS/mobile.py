@@ -53,10 +53,12 @@ def upload_photo(username):
         # TODO sheet_type 1 or 2,
         # OK TODO : login user
         sheet_answer_wei = sheet_recognition_type_one(saved_filename, sheet.question_number, sheet.option_number)
+        #sheet_answer_wei = 1
         print(colors.BLUE + 'Wei answer: ', end='')
         print(sheet_answer_wei, end='')
         print(colors.END)
         sheet_answer_sam = sheet_recognition_type_one_sam(saved_filename, sheet.question_number, sheet.option_number)
+        #sheet_answer_sam = 1
         print(colors.BLUE + 'Sam answer: ', end='')
         print(sheet_answer_sam, end='')
         print(colors.END)

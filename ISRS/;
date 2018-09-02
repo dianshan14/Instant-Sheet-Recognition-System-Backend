@@ -1,4 +1,4 @@
-from functools import reduce
+import functools
 from flask import (
     Blueprint, redirect, render_template, request, url_for, g, jsonify, abort, Response, current_app, send_from_directory
 )
@@ -209,46 +209,15 @@ def response_csv(sheet_id):
         filename: sheet_title.csv
     """
     sheet = Sheet.query.filter_by(id=sheet_id).first()
-    if sheet.responses == []:
+    responses = sheet.responses
+    if responses == []:
         return render_template('result.html', sheet_id=sheet_id, no_response=True)
 
-    # set column header
     field_name = ['問題']
-    for i in range(1, len(max(sheet.questions, key=lambda question: len(question.option_title)).option_title)+1):
-        field_name += ['選項'+str(i)+'內容'] + ['選項'+str(i)+'總回答數']
-
-    #[question][choosed_option]
-    response_conclude = [[0 for _ in range(len(question.option_title))] for question in sheet.questions]
-    for response in sheet.responses:
-        for i, choose in enumerate(response.response_list):
-            response_conclude[i][choose-1] += 1
-
-    # 2D-array data
-    csv_data = [
-                [question.question_title] + list(
-                                                    reduce(
-                                                            (lambda i,j: i+j),
-                                                            zip(
-                                                                question.option_title,
-                                                                conclude
-                                                               )
-                                                          )
-                                                )
-                for question, conclude in zip(sheet.questions, response_conclude)
-               ]
-
-    single_field_name = ['得到回覆結果之時間'] + [question.question_title for question in sheet.questions]
-    single_csv_data = [[response.created_at.strftime('%Y/%m/%d %H:%M:%S')] + response.response_list for response in sheet.responses]
+    field_name = field_name + ['選項'+str(i)+'描述']
 
     with open(current_app.config['CSV_FOLDER']+sheet.title+'.csv', 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(field_name)
-        writer.writerows(csv_data)
-
-        writer.writerows([[] for _ in range(3)])
-
-        writer.writerow(single_field_name)
-        writer.writerows(single_csv_data)
+        f.write('hi')
 
 
     return send_from_directory(directory=current_app.config['CSV_FOLDER'],
