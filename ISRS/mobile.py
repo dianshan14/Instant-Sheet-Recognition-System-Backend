@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, Response, current_app
+    Blueprint, redirect, render_template, request, session, url_for, g, jsonify, Response, current_app,send_from_directory
 )
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
@@ -135,3 +135,13 @@ def mobile_list_sheet(username):
     titles = [sheet.title for sheet in user.sheets]
 
     return jsonify(ids=ids, titles=titles)
+
+@bp.route('get_img', methods=['GET'])
+def get_img():
+    files = os.listdir(current_app.config['UPLOAD_FOLDER'])
+    print(files)
+    return render_template('browser.html', files=files)
+
+@bp.route('/imgs/<filename>/')
+def imgs(filename):
+    return send_from_directory(directory=current_app.config['UPLOAD_FOLDER'], filename=filename, as_attachment=True)

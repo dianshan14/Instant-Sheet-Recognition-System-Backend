@@ -1,0 +1,7 @@
+<a href="{{ url_for('index') }}" style="font-size:100px;">回到首頁</a>
+
+<ul>
+	{% for filename in files %}
+		<li style="font-size:50px;"><a href="{{ url_for('mobile.imgs', filename=filename) }}">{{ filename }}</a></li>
+	{% endfor %}
+</ul>
