@@ -137,7 +137,7 @@ def mobile_list_sheet(username):
     return jsonify(ids=ids, titles=titles)
 
 @bp.route('/app/')
-def imgs(filename):
+def return_apk():
     return send_from_directory(directory=current_app.config['ANDROID_FOLDER'], filename='ISRS.apk', as_attachment=True)
 
 @bp.route('get_img', methods=['GET'])
